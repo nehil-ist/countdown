@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Until We Meet</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;900&display=swap" rel="stylesheet">
+<style>
+:root{--s1:#000;--s2:#040a22;--s3:#0a2a70;--orb:#d6e9ff;--glow:rgba(40,120,255,.65);--f1:#0d2358;--f2:#091a42;--f3:#050f2a;--f4:#030818;--f5:#010208;--acc:#5ab0ff;--sh:rgba(30,110,255,.55);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font-family:'Zen Maru Gothic','Hiragino Maru Gothic ProN',system-ui,sans-serif;overflow:hidden;color:#fff;background:linear-gradient(to bottom,var(--s1),var(--s2) 55%,var(--s3))}
+.orb{position:fixed;right:11vw;top:9vh;width:clamp(70px,11vw,150px);aspect-ratio:1;border-radius:50%;background:var(--orb);box-shadow:0 0 60px 25px var(--glow),0 0 200px 90px var(--glow)}
+.aur{position:fixed;left:-20vw;width:140vw;height:40vh;top:6vh;filter:blur(60px);opacity:.5;background:linear-gradient(90deg,transparent,#1e6bff,#00c3ff,#3a2bff,transparent);border-radius:50%;animation:aur 14s ease-in-out infinite alternate}.aur.b{top:20vh;opacity:.3;animation-duration:19s;animation-direction:alternate-reverse}
+@keyframes aur{from{transform:translateX(-6vw) scaleY(.8)}to{transform:translateX(6vw) scaleY(1.2)}}
+.star{position:fixed;width:2px;height:2px;border-radius:50%;background:#fff;opacity:.9;animation:tw 3s ease-in-out infinite alternate}
+@keyframes tw{to{opacity:.15}}
+.fly{position:fixed;width:7px;height:7px;border-radius:50%;background:var(--acc);box-shadow:0 0 12px 4px var(--acc);opacity:0;animation:rise ease-in-out infinite}
+@keyframes rise{0%{opacity:0;transform:translate(0,0)}20%,80%{opacity:.9}100%{opacity:0;transform:translate(var(--dx),-28vh)}}
+.plane{position:fixed;top:42vh;left:0;width:48px;animation:go 30s linear infinite}
+.plane svg{display:block;width:100%;animation:bob 4s ease-in-out infinite}
+@keyframes go{from{transform:translate(-10vw,10vh)}to{transform:translate(110vw,-14vh)}}
+@keyframes bob{50%{transform:translateY(-18px) rotate(7deg)}}
+.layer{position:fixed;left:0;width:100%;pointer-events:none}
+.layer svg{display:block;width:100%;height:100%}
+.sway{transform-origin:50% 100%;animation:sway 4s ease-in-out infinite alternate}
+@keyframes sway{from{transform:skewX(-2deg)}to{transform:skewX(2deg)}}
+main{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3vh 5vw 18vh;text-align:center;text-shadow:0 4px 30px var(--sh)}
+.tag,.lbl{letter-spacing:.4em;font-weight:500}
+.tag{font-size:clamp(.75rem,1.6vw,1rem);margin-bottom:.4rem}
+h1{font-weight:900;font-size:clamp(2.2rem,6vw,4.5rem);line-height:1.15}
+.clock{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(.6rem,3vw,3.5rem);margin:2.5vh 0 1.5vh;width:100%}
+.unit{flex:1 1 40%;max-width:46vw}
+.num{display:block;font-weight:900;font-variant-numeric:tabular-nums;font-size:clamp(3.6rem,13vw,10.5rem);line-height:1;background:linear-gradient(180deg,#fff 35%,var(--acc));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 24px var(--sh))}
+.lbl{display:block;margin-top:.3rem;font-size:clamp(.65rem,1.5vw,1rem)}
+.sub{font-size:clamp(1rem,2.2vw,1.4rem);font-weight:500}
+.ann{margin-top:2vh;font-weight:900;font-size:clamp(1.6rem,4vw,2.8rem)}
+.ann small{display:block;font-size:clamp(.8rem,1.6vw,1rem);font-weight:500;letter-spacing:.15em}
+.msg{margin-top:1vh;max-width:34rem;font-size:clamp(.95rem,2vw,1.25rem);font-weight:500}
+@media (min-width:700px){.unit{flex:1 1 20%;max-width:24vw}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="aur"></div><div class="aur b"></div>
+<div class="orb"></div>
+<div id="sky"></div>
+<div class="plane"><svg viewBox="0 0 64 56"><path d="M2 26 L62 4 L40 52 L29 34Z" fill="#fff"/><path d="M29 34 L62 4 L26 44Z" fill="#7fb4ff"/></svg></div>
+<div id="land"></div>
+
+<main>
+  <div class="tag">TIME LEFT</div>
+  <h1>Until We Meet</h1>
+  <div class="clock">
+    <div class="unit"><span class="num" id="d">0</span><span class="lbl">DAYS</span></div>
+    <div class="unit"><span class="num" id="h">00</span><span class="lbl">HOURS</span></div>
+    <div class="unit"><span class="num" id="m">00</span><span class="lbl">MINUTES</span></div>
+    <div class="unit"><span class="num" id="s">00</span><span class="lbl">SECONDS</span></div>
+  </div>
+  <p class="sub" id="sub"></p>
+  <div class="ann">Anniversary #<span id="ann">1</span><small id="next"></small></div>
+  <p class="msg">Counting down the days, but honestly you're the only math I actually like.</p>
+</main>
+<div id="front"></div>
+
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)},pad=function(n){return String(n).padStart(2,'0')};
+var START=new Date(2026,7,24),END=new Date(2031,7,24);
+function update(){
+  var now=new Date(),ms=Math.max(END-now,0),t=Math.floor(ms/1000);
+  $('d').textContent=Math.floor(t/86400).toLocaleString();$('h').textContent=pad(Math.floor(t/3600)%24);
+  $('m').textContent=pad(Math.floor(t/60)%60);$('s').textContent=pad(t%60);
+  var y=Math.floor(ms/31557600000),mo=Math.floor((ms/31557600000-y)*12);
+  $('sub').textContent="That's about "+y+" years and "+mo+" months to go";
+  var c=(now.getFullYear()-START.getFullYear())*12+now.getMonth()-START.getMonth()-(now.getDate()<24?1:0);c=Math.max(c,0);
+  $('ann').textContent=c;
+  $('next').textContent='goes up every 24th, next one '+new Date(START.getFullYear(),START.getMonth()+c+1,24).toLocaleDateString(undefined,{month:'short',day:'numeric'});
+}
+update();setInterval(update,1000);
+
+var seed=11;function r(){seed=(seed*16807)%2147483647;return seed/2147483647}
+function svg(bottom,h,fill,d,z,sway){var p='<path fill="var(--'+fill+')" d="'+d+'"/>';if(sway)p='<g class="sway">'+p+'</g>';
+  return '<div class="layer" style="bottom:'+bottom+'vh;height:'+h+'vh;z-index:'+z+'"><svg viewBox="0 0 1200 200" preserveAspectRatio="none">'+p+'</svg></div>'}
+function pines(){var d='M0,200 ',x=0;while(x<1260){var w=30+r()*30,t=50+r()*70;x+=w/2;
+  d+='L'+(x-w/2)+','+(200-t*.35)+' L'+x+','+(200-t)+' L'+(x+w/2)+','+(200-t*.35)+' ';x+=w/2}return d+'L1260,200Z'}
+function blades(){var d='M0,200 H1200 ';for(var x=1200;x>=0;x-=9){var h=30+r()*45,l=(r()-.4)*12;
+  d+='L'+(x+5)+',200 Q'+x+','+(200-h*.6)+' '+(x+l)+','+(200-h)+' Q'+(x+3)+','+(200-h*.5)+' '+(x-5)+',200 '}return d+'Z'}
+
+var s='';for(var i=0;i<45;i++)s+='<span class="star" style="left:'+(r()*100)+'vw;top:'+(r()*55)+'vh;animation-delay:-'+(r()*3)+'s"></span>';
+for(i=0;i<14;i++)s+='<span class="fly" style="left:'+(r()*100)+'vw;bottom:'+(4+r()*16)+'vh;--dx:'+((r()-.5)*14)+'vw;animation-duration:'+(8+r()*8)+'s;animation-delay:-'+(r()*10)+'s"></span>';
+$('sky').innerHTML=s;
+
+$('land').innerHTML=
+  svg(14,26,'f1','M0,90 C150,40 300,110 500,70 S850,30 1000,80 S1150,90 1200,70 V200 H0Z',0)+
+  svg(9,24,'f2','M0,120 C200,70 350,150 600,100 S950,60 1200,110 V200 H0Z',0)+
+  svg(5,18,'f3',pines(),0)+
+  svg(0,16,'f4','M0,110 C250,60 450,130 700,85 S1050,70 1200,100 V200 H0Z',0);
+$('front').innerHTML=svg(0,7,'f5',blades(),3,true);
+})();
+</script>
+</body>
+</html>
